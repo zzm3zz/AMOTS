@@ -20,11 +20,6 @@ You can reproduce our method as follows step by step:
 - CUDA version 11.3
 - python version 3.8.10
 
-To install requirements:
-
-```setup
-pip install -r requirements.txt
-```
 
 ## Dataset
 
