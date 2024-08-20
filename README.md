@@ -1,6 +1,5 @@
-# Paper
-**AMOTS: Partially Supervised Framework with Aspect-Aware Complementary for Multi-Organ and Tumor Segmentation** \
-*Zengmin Zhang Yanjun Peng Xiaomeng Duan* \
+# AMOTS: Partially Supervised Framework with Aspect-Aware Complementary for Multi-Organ and Tumor Segmentation
+*Zengmin Zhang Yanjun Peng Xiaomeng Duan* 
 
 ![Our framework overview](Images/AMOTS.png)
 ![Our AACNet overview](Images/AACNet.png)
