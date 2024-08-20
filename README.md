@@ -34,7 +34,9 @@ pip install -r requirements.txt
 
 
 ## ROI Model
-First, refer to our competition article [code](https://github.com/zzm3zz/FLARE2023) to download the ROI model code and weight files.
+First, make sure our ROI model code has been installed. Then move the ROI model folder to the same root directory as AMOTS.
+
+Then, refer to our competition article [code](https://github.com/zzm3zz/FLARE2023) to download the ROI model code and weight files.
 
 
 ## Preprocessing
@@ -81,8 +83,6 @@ python nnunet/run/run_training.py 3d_fullres nnUNetTrainerV2_AMOTS_Tumor organs_
 ```
 
 ## Inference and evaluation
-
-First, make sure our ROI model code has been installed. Then move the ROI model folder to the same root directory as AMOTS.
 
 To infer the testing cases, run this command:
 
