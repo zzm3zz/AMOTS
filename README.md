@@ -28,10 +28,7 @@ You can reproduce our method as follows step by step:
 
 
 ## ROI Model
-First, make sure our ROI model code has been installed. Then move the ROI model folder to the same root directory as AMOTS.
-
-Then, refer to our competition article [code](https://github.com/zzm3zz/FLARE2023) to download the ROI model code and weight files.
-
+First, make sure our ROI model code has been installed([code](https://github.com/zzm3zz/FLARE2023)). Then move the ROI model folder to the same root directory as AMOTS.
 
 ## Preprocessing
 
@@ -45,13 +42,15 @@ Follow the default method of nnU-Net
 Organs Model: [2.5, 0.81835938, 0.81835938]
 Tumor Model: [4, 1.2, 1.2]  
 
-We use the prediction results provided by the roi model for cropping and use them as pseudo labels:
+We use the roi model to perform inference on the training set (1497 CT scans with tumor label). (In the root directory of the ROI model code):
 
 ```
 python nnUNet_predict -i INPUT_FOLDER  -o OUTPUT_FOLDER  -t 6  -p nnUNetPlansFLARE22Small   -m 3d_fullres \
  -tr nnUNetTrainerV2_FLARE_Small  -f all  --mode fastest --disable_tta
 ```
+And crop the region of interest based on the prediction results and use it as a pseudo label.
 
+Then, in this directory, complete the following operations for cropped data:
 - tumor model preprocessing
 ```
 python nnUNet_plan_and_preprocess.py -t Task_id -pl3d ExperimentPlanner3DFabiansResUNet_v21_Tumor -pl2d None
