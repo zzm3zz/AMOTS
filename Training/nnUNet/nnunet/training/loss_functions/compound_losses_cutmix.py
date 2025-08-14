@@ -250,7 +250,7 @@ class DC_CE_Partial_MergeProb_loss(nn.Module):
         return result
     
     
-    
+# FLARE23    
 class DC_CE_Partial_MergeProb_loss_ours(nn.Module):
     """
     for partial data, this loss first convert logits to prob and 
@@ -278,7 +278,8 @@ class DC_CE_Partial_MergeProb_loss_ours(nn.Module):
 #         print(net_output.shape)
 #         print(target.shape)
 #         print(partial_type)
-        if len(partial_type) >= 13:
+        # 器官全标记数据（FLARE23）
+        if len(partial_type) == 13:
             dc_loss = self.dc(net_output, target)
             ce_loss = self.ce(net_output, target)
             result = ce_loss + dc_loss
@@ -289,6 +290,7 @@ class DC_CE_Partial_MergeProb_loss_ours(nn.Module):
         new_target_bg = 0
         reg_loss = 0
         if len(partial_type) < 13:
+            # 硬挖掘层
             merge_max = merge_prediction_max_ours(new_net_output,
                                                            new_target,
                                                            partial_type)
@@ -687,16 +689,16 @@ def merge_prediction_max_ours(output, target, partial_type):
     # 计算merge-max香农熵损失
     
     
-    # 计算全监督
-#     output_fg = output[:, partial_type, :, :]
-#     new_target = torch.zeros_like(target)
-#     new_target_bg = torch.zeros_like(target)
-#     if 14 not in partial_type:
-#         new_output = torch.cat([output[:,0,...], 
-#                             output_fg, output[:,14,...].unsqueeze(1)], dim=1)
-#     else:
-#         new_output = torch.cat([output[:,0,...],
-#                             output_fg], dim=1)
+    # 计算全监督部分（为了混合全监督和伪标签监督更方便计算，已经将标签进行了融合，因此这部分删除）
+    # output_fg = output[:, partial_type, :, :]
+    # new_target = torch.zeros_like(target)
+    # new_target_bg = torch.zeros_like(target)
+    # if 14 not in partial_type:
+    #     new_output = torch.cat([output[:,0,...], 
+    #                         output_fg, output[:,14,...].unsqueeze(1)], dim=1)
+    # else:
+    #     new_output = torch.cat([output[:,0,...],
+    #                         output_fg], dim=1)
     #带有真实标签的层 
 #     for i,label in enumerate(partial_type):
 #         new_target[target==label] = i
