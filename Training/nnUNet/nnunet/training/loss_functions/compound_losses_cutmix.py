@@ -303,12 +303,13 @@ class DC_CE_Partial_MergeProb_loss_ours(nn.Module):
 #         print(new_target_bg.shape)
 #         print(merge_max.shape)
 #         print(1/0)
+        # 标签中已有融合的伪标签（计算部分真实监督和伪标签监督损失）
         dc_loss = self.dc(new_net_output, new_target)
         ce_loss = self.ce(new_net_output, new_target)
         
-#         # 背景+未标记混合损失+香浓熵损失
-#         dc_loss_bg = self.dc(new_bg, new_target_bg)
-#         ce_loss_bg = self.ce(new_bg, new_target_bg)
+#         # 硬挖掘损失
+        dc_loss_bg = self.dc(new_bg, new_net_output[:,0,...])
+        ce_loss_bg = self.ce(new_bg, new_net_output[:,0,...])
         
         # probs = F.log_softmax(merge_max)
         
@@ -316,6 +317,7 @@ class DC_CE_Partial_MergeProb_loss_ours(nn.Module):
         
         # # ce_loss = self.ce(torch.log(new_net_output_soft), 
         #                   new_target.squeeze().type(torch.cuda.LongTensor))
+     
         if self.aggregate == "sum":
             result = ce_loss + dc_loss
         elif self.aggregate == "ce":
@@ -325,9 +327,10 @@ class DC_CE_Partial_MergeProb_loss_ours(nn.Module):
         else:
             # reserved for other stuff (later?)
             raise NotImplementedError("nah son")
-        # p1 = len(partial_type) / 15
-        # result = result*p1 + (dc_loss_bg + ce_loss_bg)*(1-p1)*0.5 + reg_loss*(1-p1)*0.5
-        return result + reg_loss
+        p1 = len(partial_type) / 15
+        # （部分真实监督部分 + 伪标签辅助监督） + 硬挖掘 + 正则化损失
+        result = result*p1 + (dc_loss_bg + ce_loss_bg)*(1-p1)*0.5 + reg_loss*(1-p1)*0.5  # 混合监督损失
+        # return result + reg_loss
 
     
 class DC_CE_Partial_MergeProb_loss_mots(nn.Module):
